@@ -1,0 +1,710 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #0b0c0f;
+    --panel: #13151a;
+    --panel-2: #191c22;
+    --line: #282c34;
+    --muted: #8d929c;
+    --text: #f2f1ed;
+    --accent: #d8f36a;
+    --accent-2: #b8d84d
+}
+
+* {
+    box-sizing: border-box
+}
+
+html {
+    background: var(--bg)
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Manrope, system-ui, sans-serif
+}
+
+button,
+input {
+    font: inherit
+}
+
+button {
+    cursor: pointer;
+    color: inherit;
+    border: 0;
+    background: none
+}
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column
+}
+
+.topbar {
+    height: 80px;
+    padding: 0 5vw;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    position: sticky;
+    top: 0;
+    background: rgba(11, 12, 15, .9);
+    backdrop-filter: blur(16px);
+    z-index: 5
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.8px;
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.brand-mark {
+    background: var(--accent);
+    color: #10120d;
+    border-radius: 9px;
+    padding: 5px 9px;
+    font-size: 16px
+}
+
+.brand-accent {
+    color: var(--accent)
+}
+
+.main-nav {
+    display: flex;
+    gap: 24px;
+    flex: 1
+}
+
+.nav-link {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600
+}
+
+.nav-link.active,
+.nav-link:hover {
+    color: var(--text)
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 12px;
+    width: 210px
+}
+
+.search-box input {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text);
+    width: 100%;
+    font-size: 12px
+}
+
+.icon-button {
+    color: var(--muted);
+    font-size: 20px
+}
+
+.hero {
+    min-height: 450px;
+    padding: 80px 9vw 70px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center
+}
+
+.hero-glow {
+    position: absolute;
+    width: 570px;
+    height: 570px;
+    right: 4%;
+    top: -180px;
+    background: radial-gradient(circle, rgba(216, 243, 106, .2), transparent 65%);
+    filter: blur(20px)
+}
+
+.hero-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 620px
+}
+
+.eyebrow {
+    font: 11px "DM Mono", monospace;
+    letter-spacing: 1.6px;
+    color: var(--accent);
+    margin: 0 0 16px
+}
+
+.hero h2 {
+    font-size: clamp(42px, 6vw, 78px);
+    line-height: .98;
+    letter-spacing: -4px;
+    margin: 0 0 24px
+}
+
+.hero h2 em {
+    font-style: normal;
+    color: var(--accent)
+}
+
+.hero-description,
+.detail-overview {
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 520px;
+    font-size: 14px
+}
+
+.hero-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px
+}
+
+.primary-button,
+.secondary-button {
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700
+}
+
+.primary-button {
+    background: var(--accent);
+    color: #11140b
+}
+
+.primary-button:hover {
+    background: #e5ff83
+}
+
+.primary-button:disabled {
+    opacity: .5;
+    cursor: not-allowed
+}
+
+.secondary-button {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, .03)
+}
+
+.secondary-button:hover {
+    border-color: var(--muted)
+}
+
+.hero-stat {
+    position: absolute;
+    right: 9vw;
+    bottom: 60px;
+    color: var(--muted);
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    font: 10px "DM Mono", monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px
+}
+
+.stat-number {
+    font-size: 62px;
+    color: var(--text);
+    line-height: .8
+}
+
+.content-wrap,
+.detail-page,
+.diagnostics-page {
+    width: min(1180px, 90vw);
+    margin: 0 auto
+}
+
+.content-wrap {
+    padding: 64px 0
+}
+
+.section-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 26px
+}
+
+.section-heading h1 {
+    font-size: 32px;
+    letter-spacing: -1.6px;
+    margin: 0
+}
+
+.catalog-count,
+.section-heading span {
+    color: var(--muted);
+    font: 11px "DM Mono", monospace
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 26px 16px
+}
+
+.poster {
+    aspect-ratio: 2/3;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(140deg, #232a36, #101116);
+    border: 1px solid var(--line);
+    display: block;
+    text-align: left
+}
+
+.poster-noise {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(216, 243, 106, .22), transparent 30%), linear-gradient(150deg, transparent 30%, rgba(0, 0, 0, .7))
+}
+
+.poster-initial {
+    position: absolute;
+    left: 22px;
+    bottom: 28px;
+    font-size: 72px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, .14);
+    line-height: 1
+}
+
+.type-badge {
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, .55);
+    font: 9px "DM Mono", monospace;
+    text-transform: uppercase;
+    color: #d9dce1
+}
+
+.play-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    opacity: 0;
+    font-size: 28px;
+    color: var(--accent);
+    background: rgba(0, 0, 0, .25);
+    transition: .2s
+}
+
+.poster:hover .play-overlay {
+    opacity: 1
+}
+
+.media-card h3 {
+    font-size: 13px;
+    margin: 11px 0 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis
+}
+
+.card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start
+}
+
+.card-meta p {
+    font: 10px "DM Mono", monospace;
+    color: var(--muted);
+    margin: 0
+}
+
+.card-meta p span {
+    color: var(--line)
+}
+
+.save-button {
+    color: var(--muted);
+    font-size: 19px;
+    padding: 7px 0
+}
+
+.save-button.saved {
+    color: var(--accent)
+}
+
+.empty-state {
+    text-align: center;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    padding: 75px 30px;
+    color: var(--muted)
+}
+
+.empty-icon {
+    font-size: 45px;
+    color: var(--accent);
+    margin-bottom: 15px
+}
+
+.empty-state h2 {
+    color: var(--text);
+    font-size: 20px;
+    margin: 0 0 8px
+}
+
+.empty-state p {
+    font-size: 13px;
+    max-width: 480px;
+    margin: 0 auto 20px;
+    line-height: 1.6
+}
+
+.empty-state code {
+    font: 11px "DM Mono", monospace;
+    color: var(--accent);
+    background: var(--panel);
+    padding: 10px 12px;
+    border-radius: 5px
+}
+
+.detail-page {
+    padding: 40px 0 80px
+}
+
+.back-button {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 45px
+}
+
+.detail-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    align-items: center
+}
+
+.detail-poster {
+    max-width: 240px
+}
+
+.detail-copy h1 {
+    font-size: clamp(38px, 6vw, 70px);
+    letter-spacing: -3px;
+    line-height: 1;
+    margin: 0 0 15px
+}
+
+.detail-facts {
+    font: 11px "DM Mono", monospace;
+    color: var(--muted)
+}
+
+.detail-facts span {
+    margin: 0 7px;
+    color: var(--line)
+}
+
+.source-note {
+    margin-top: 20px;
+    color: var(--muted);
+    font: 10px "DM Mono", monospace;
+    word-break: break-all
+}
+
+.status-dot {
+    width: 7px;
+    height: 7px;
+    background: #d0a646;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px
+}
+
+.status-dot.online {
+    background: #83df83
+}
+
+.status-dot.offline {
+    background: #de7070
+}
+
+.episode-list {
+    margin-top: 60px;
+    border-top: 1px solid var(--line)
+}
+
+.episode-list h2 {
+    font-size: 18px
+}
+
+.episode-list h2 span {
+    color: var(--muted);
+    font: 11px "DM Mono", monospace;
+    margin-left: 8px
+}
+
+.episode-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 8px;
+    border-top: 1px solid var(--line);
+    text-align: left
+}
+
+.episode-row:hover {
+    background: var(--panel)
+}
+
+.episode-number {
+    color: var(--accent);
+    font: 12px "DM Mono", monospace;
+    width: 35px
+}
+
+.episode-row small {
+    margin-left: auto;
+    color: var(--muted);
+    font: 10px "DM Mono", monospace
+}
+
+.player-panel {
+    margin-top: 50px;
+    background: #050506;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden
+}
+
+.player-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 18px;
+    color: var(--muted);
+    font: 10px "DM Mono", monospace
+}
+
+.player-panel video {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    background: #000
+}
+
+.player-help {
+    padding: 15px;
+    color: var(--muted);
+    font-size: 11px
+}
+
+.player-help a {
+    color: var(--accent)
+}
+
+.diagnostics-page {
+    padding: 65px 0 100px
+}
+
+.page-intro {
+    max-width: 650px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6
+}
+
+.diagnostic-list {
+    border-top: 1px solid var(--line)
+}
+
+.diagnostic-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 10px;
+    border-bottom: 1px solid var(--line)
+}
+
+.diagnostic-row>div {
+    flex: 1
+}
+
+.diagnostic-row strong {
+    display: block;
+    font-size: 13px
+}
+
+.diagnostic-row small {
+    display: block;
+    color: var(--muted);
+    font: 10px "DM Mono", monospace;
+    margin-top: 5px;
+    word-break: break-all
+}
+
+.diagnostic-status {
+    font: 10px "DM Mono", monospace;
+    color: var(--muted);
+    text-transform: uppercase
+}
+
+.small-button {
+    padding: 8px 11px;
+    font-size: 10px
+}
+
+.warning-box {
+    margin-top: 35px;
+    padding: 20px;
+    border: 1px solid #554d2d;
+    background: rgba(216, 243, 106, .04);
+    border-radius: 9px
+}
+
+.warning-box strong {
+    color: var(--accent);
+    font-size: 12px
+}
+
+.warning-box p {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 0
+}
+
+.footer {
+    border-top: 1px solid var(--line);
+    padding: 24px 5vw;
+    color: var(--muted);
+    font: 10px "DM Mono", monospace;
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto
+}
+
+.footer strong {
+    color: var(--text)
+}
+
+.footer button {
+    color: var(--accent)
+}
+
+@media(max-width:750px) {
+    .topbar {
+        height: auto;
+        min-height: 72px;
+        padding: 14px 5vw;
+        flex-wrap: wrap;
+        gap: 16px
+    }
+
+    .main-nav {
+        order: 3;
+        flex-basis: 100%;
+        overflow: auto;
+        gap: 18px;
+        padding-bottom: 3px
+    }
+
+    .top-actions {
+        margin-left: auto
+    }
+
+    .search-box {
+        width: 150px
+    }
+
+    .hero {
+        padding: 60px 7vw;
+        min-height: 500px
+    }
+
+    .hero-stat {
+        display: none
+    }
+
+    .content-wrap,
+    .detail-page,
+    .diagnostics-page {
+        width: 90vw;
+        padding-top: 42px
+    }
+
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px 12px
+    }
+
+    .detail-layout {
+        grid-template-columns: 120px 1fr;
+        gap: 22px
+    }
+
+    .detail-copy h1 {
+        font-size: 32px;
+        letter-spacing: -1.5px
+    }
+
+    .detail-overview {
+        font-size: 12px
+    }
+
+    .detail-layout .hero-actions {
+        flex-wrap: wrap
+    }
+
+    .detail-poster {
+        max-width: 120px
+    }
+
+    .diagnostic-row {
+        flex-wrap: wrap
+    }
+
+    .diagnostic-row .secondary-button {
+        margin-left: auto
+    }
+
+    .footer {
+        gap: 15px;
+        flex-direction: column
+    }
+
+    .hero h2 {
+        letter-spacing: -2px
+    }
+}
