@@ -43,7 +43,7 @@ function parseListing(html: string, baseUrl: string): Entry[] {
     if (url.origin !== new URL(baseUrl).origin || seen.has(url.href)) continue;
     seen.add(url.href);
     entries.push({
-      name: decodeURIComponent(label.replace(/\/$/, "")),
+      name: decodeName(label.replace(/\/$/, "")),
       url: url.href,
       directory: rawHref.endsWith("/") || label.endsWith("/"),
       size: parseSize(match[0].match(/(?:fb-s|size)[^>]*>([^<]+)/i)?.[1])
@@ -53,6 +53,9 @@ function parseListing(html: string, baseUrl: string): Entry[] {
 }
 
 function stripTags(value: string) { return value.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&#x27;/g, "'").replace(/&quot;/g, "\""); }
+function decodeName(value: string) {
+  try { return decodeURIComponent(value); } catch { return value; }
+}
 function parseSize(value?: string) {
   if (!value) return undefined;
   const match = value.trim().match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
@@ -156,8 +159,12 @@ async function readPrevious(): Promise<{ manifest?: CatalogManifest; items: Map<
 async function writeJson(filePath: string, value: unknown) {
   const content = `${JSON.stringify(value)}\n`;
   await mkdir(path.dirname(filePath), { recursive: true });
+  try {
+    const previous = await readFile(filePath, "utf8");
+    if (previous === content) return { size: Buffer.byteLength(content), hash: contentHash(content), changed: false };
+  } catch { /* new output */ }
   await writeFile(filePath, content);
-  return { size: Buffer.byteLength(content), hash: contentHash(content) };
+  return { size: Buffer.byteLength(content), hash: contentHash(content), changed: true };
 }
 
 async function main() {
@@ -203,11 +210,31 @@ async function main() {
     const urls = chunks.map((_, index) => `/catalog/collections/${chunks.length === 1 ? `${id}.json` : `${id}.${index + 1}.json`}`);
     collections.push({ id, name: source.name, type: items[0]?.type || (source.category === "Series" ? "series" : "movie"), category: source.category, itemCount: items.length, url: urls[0], urls, size: totalSize, hash: firstHash });
   }
-  const searchResult = await writeJson(path.join(root, "indexes", "search.json"), search);
-  const manifest: CatalogManifest = { version: 2, generatedAt: new Date().toISOString(), totalContent: search.length, collections, search: { urls: ["/catalog/indexes/search.json"], size: searchResult.size, hash: searchResult.hash } };
+  const searchChunks: SearchRecord[][] = [];
+  let searchChunk: SearchRecord[] = [];
+  for (const record of search) {
+    const next = [...searchChunk, record];
+    if (searchChunk.length && Buffer.byteLength(JSON.stringify(next)) > maxShardBytes) {
+      searchChunks.push(searchChunk);
+      searchChunk = [record];
+    } else searchChunk = next;
+  }
+  if (searchChunk.length || !searchChunks.length) searchChunks.push(searchChunk);
+  const searchResults = [];
+  for (let index = 0; index < searchChunks.length; index += 1) {
+    const fileName = searchChunks.length === 1 ? "search.json" : `search.${index + 1}.json`;
+    const result = await writeJson(path.join(root, "indexes", fileName), searchChunks[index]);
+    searchResults.push({ url: `/catalog/indexes/${fileName}`, ...result });
+  }
+  const manifest: CatalogManifest = {
+    version: 2, generatedAt: new Date().toISOString(), totalContent: search.length, collections,
+    search: { urls: searchResults.map((result) => result.url), size: searchResults.reduce((total, result) => total + result.size, 0), hash: searchResults[0]?.hash }
+  };
   await writeJson(path.join(root, "manifest.json"), manifest);
-  console.log(`Generated ${search.length} content records, ${collections.length} collections, ${collections.length + search.length + 1} logical catalog groups.`);
-  console.log(`Maximum collection shard target: ${maxShardBytes} bytes`);
+  const generatedFiles = collections.reduce((total, collection) => total + (collection.urls?.length || 1), 0) + searchResults.length + search.length;
+  console.log(`Generated ${search.length} content records across ${collections.length} collections.`);
+  console.log(`Generated ${generatedFiles} catalog files (details, collection shards, search shards, and manifest).`);
+  console.log(`Maximum shard target: ${maxShardBytes} bytes; search shards: ${searchResults.length}.`);
 }
 
 main().catch((error) => { console.error(error); process.exitCode = 1; });
